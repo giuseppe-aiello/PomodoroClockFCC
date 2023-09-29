@@ -1,10 +1,20 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
+import { faPlus} from '@fortawesome/free-solid-svg-icons'
+import { faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import { faToggleOn } from '@fortawesome/free-solid-svg-icons'
+import { faToggleOff } from '@fortawesome/free-solid-svg-icons'
+
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
 function Timer() {
+
 
     const [sessionLength, setSessionLength] = useState(1500); // Inizializza workLength a 1500 secondi (25 minuti)
     const [breakLength, setBreakLength] = useState(300); // Inizializza breakLength a 300 secondi (5 minuti)
@@ -189,43 +199,52 @@ function Timer() {
   }, [breakLength]);
 
   return (
-    <div>
-        <div className="box">
-
-          <div className="pauseLength">
+  <div>
+      <div className="box">
+        <div className='box-inside'>
           <h2 id="break-label">Break Length</h2>
-          <output id="break-length">{Math.floor(breakLength/60)}</output>
-          <button id="break-increment" onClick={() => handlePauseLength('+')}>+</button>
-          <button id="break-decrement" onClick={() => handlePauseLength('-')}>-</button>
-
+          <div className="pauseLength">
+            <button className="minusButton" id="break-decrement" onClick={() => handlePauseLength('-')}><FontAwesomeIcon icon={faMinus}/></button>
+            <output id="break-length">{Math.floor(breakLength/60)}</output>
+            <button className="plusButton" id="break-increment" onClick={() => handlePauseLength('+')}><FontAwesomeIcon icon={faPlus}/></button>
           </div>
+        </div>  
 
-          <div className="changeLength">
-            <h2 id="session-label">Session Length</h2>
-            <output id="session-length">{Math.floor(sessionLength/60)}</output>
-            <button id="session-increment" onClick={() => handleWorkLength('+')}>+</button>
-            <button id="session-decrement" onClick={() => handleWorkLength('-')}>-</button>
-          </div>
+
+        <div className='box-inside'>
+          <h2 id="session-label">Session Length</h2>
+            <div className="sessionLength">
+              <button className="minusButton" id="session-decrement" onClick={() => handleWorkLength('-')}><FontAwesomeIcon icon={faMinus}/></button>
+              <output id="session-length">{Math.floor(sessionLength/60)}</output>
+              <button className="plusButton" id="session-increment" onClick={() => handleWorkLength('+')}><FontAwesomeIcon icon={faPlus}/></button>
+            </div>
         </div>
+      </div>
 
 
-        <output id="timer-label">{activeTimer}</output>
-      <div>
-      <p id="time-left">
+    <div className='timer'>
+      <output className="timer-label" id="timer-label">{activeTimer}</output>
+        <div>
+          <p className="time-left" id="time-left">
   {activeTimer === 'Session'
     ? `${Math.floor(workTimeLeft / 60).toString().padStart(2, '0')}:${(workTimeLeft % 60).toString().padStart(2, '0')}`
     : `${Math.floor(breakTimeLeft / 60).toString().padStart(2, '0')}:${(breakTimeLeft % 60).toString().padStart(2, '0')}`}
-</p>
-      </div>
-      <button onClick={activeTimer === 'Session' ? (switchToBreakTimer) : (switchToWorkTimer)}>SWITCH</button>
-      <button id="start_stop" onClick={startStop}>START</button>
-      <button id="reset" onClick={() => resetTimer()}>Reset</button>
-      <audio
+          </p>
+        </div>
+        <div className='box-2'>
+        <button onClick={activeTimer === 'Session' ? (switchToBreakTimer) : (switchToWorkTimer)}>
+        {activeTimer === 'Session' ? <FontAwesomeIcon icon={faToggleOff}/> : <FontAwesomeIcon icon={faToggleOn}/>}
+          </button>
+        <button id="start_stop" onClick={startStop}><FontAwesomeIcon icon={faPlay}/></button>
+        <button id="reset" onClick={() => resetTimer()}><FontAwesomeIcon icon={faRefresh}/></button>
+        </div>
+        <audio
           id="beep"
           preload="auto"
           src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
         />
     </div>
+  </div>
   );
 }
 
